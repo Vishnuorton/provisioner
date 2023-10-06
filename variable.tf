@@ -3,10 +3,7 @@ variable "key_name" {
   description = "key pair name"
 }
 
-variable "availability_zone" {
-  type = list(string)
-  description = "all availability zone"
-}
+
 
 variable "region" {
   type = string

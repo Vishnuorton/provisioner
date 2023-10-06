@@ -15,16 +15,25 @@ data "aws_ami" "ami" {
 
 }
 resource "aws_instance" "Ec2_Instance" {
-  count = length(var.availability_zone)                     #count is one of the metadata/argument used in resource block only.if we want to create
-  ami = data.aws_ami.ami.id                                 #same resource multiple times then use count.here we create instances based on number of availabilty zones
-  instance_type = var.instance_type                         #check variable.tf file.like for loop 
-  availability_zone = var.availability_zone[count.index]    #------>array concept 
-  key_name = var.key_name                                   #check output.tf to print multiple public ip of instances
+  ami = data.aws_ami.ami.id                                
+  instance_type = var.instance_type                         
+  key_name = var.key_name                                   
   security_groups = [ aws_security_group.sg.name ]
   tags = {
-    Name = "${var.instance_name} ${count.index}"            #can't use + so instead use "${}"
+    Name = "instance1"            
   }
-
+  
+  provisioner "file" {
+    source = "index.html"
+    destination = "/home/ec2-user/index.html"
+  }
+  connection {
+    type = "ssh"
+    user = "ec2-user"
+    host = self.public_ip
+    private_key = file("Vishnu.pem")
+    timeout = "3m"
+  }
 
 }
 
