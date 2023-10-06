@@ -22,10 +22,19 @@ resource "aws_instance" "Ec2_Instance" {
   tags = {
     Name = "instance1"            
   }
+
+  provisioner "remote-exec" {
+    inline = [
+      "#!/bin/bash",
+      "sudo yum update -y",
+      "sudo yum install -httpd",
+      "sudo systemctl httpd start"
+    ]
+  }
   
   provisioner "file" {
     source = "index.html"
-    destination = "/home/ec2-user/index.html"
+    destination = "index/index.html"
   }
   connection {
     type = "ssh"
@@ -34,6 +43,8 @@ resource "aws_instance" "Ec2_Instance" {
     private_key = file("Vishnu.pem")
     timeout = "3m"
   }
+
+ 
 
 }
 
