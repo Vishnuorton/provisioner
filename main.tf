@@ -23,7 +23,13 @@ resource "aws_instance" "Ec2_Instance" {
     Name = "instance1"            
   }
 
-  provisioner "remote-exec" {
+#mandatory to use /bin/bash since terraform may have different shell so we need to inform terraform to use bash shell
+#mandatory to use sudo if we going to perform install or update package 
+#sudo chmod -R 777 ---> because any file or folder we create it only have rwx-rx-r so we need to give full access to folder
+#so that terraform can perform provisioner "file" to copy index to ec2.
+#sudo chmod -R 777 ---> it give all file and sub folder in the dir to give full access 
+
+  provisioner "remote-exec" {                 
     inline = [
       "#!/bin/bash",
       "sudo yum update -y",
