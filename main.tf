@@ -14,7 +14,6 @@ data "aws_ami" "ami" {
   }
 
 }
-
 resource "aws_instance" "Ec2_Instance" {
   count = length(var.availability_zone)                     #count is one of the metadata/argument used in resource block only.if we want to create
   ami = data.aws_ami.ami.id                                 #same resource multiple times then use count.here we create instances based on number of availabilty zones
@@ -31,6 +30,7 @@ resource "aws_instance" "Ec2_Instance" {
 
 resource "aws_security_group" "sg" {
   name = "sg"
+  description = "allow http and ssh"
   ingress {
     from_port = 80
     to_port = 80
