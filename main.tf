@@ -27,14 +27,15 @@ resource "aws_instance" "Ec2_Instance" {
     inline = [
       "#!/bin/bash",
       "sudo yum update -y",
-      "sudo yum install -httpd",
-      "sudo systemctl httpd start"
+      "sudo yum install httpd -y",
+      "sudo systemctl start httpd",
+      "sudo chmod -R 777 /var/www/html"
     ]
   }
-  
+    
   provisioner "file" {
     source = "index.html"
-    destination = "index/index.html"
+    destination = "/var/www/html/index.html"
   }
   connection {
     type = "ssh"
@@ -62,5 +63,11 @@ resource "aws_security_group" "sg" {
     to_port = 22
     protocol = "tcp"
     cidr_blocks = [ "0.0.0.0/0" ]
+  }
+   egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
