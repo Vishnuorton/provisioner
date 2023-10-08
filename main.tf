@@ -70,10 +70,10 @@ resource "aws_security_group" "sg" {
     protocol = "tcp"
     cidr_blocks = [ "0.0.0.0/0" ]
   }
-   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+   egress {                     # mandatory to use egress always because when create sg in console its default
+    from_port   = 0             # so even if we not mention egress aws will add during sg creation.but when do  
+    to_port     = 0             # PROGRAMMATICALLY its mandatory to mention egress then only instance can get data 
+    protocol    = "-1"          # since sg is stateful it doesn't check response.but in this program we told terraform 
+    cidr_blocks = ["0.0.0.0/0"] # to update so to update instance need to access internet for that we have to give access to instance
   }
 }
